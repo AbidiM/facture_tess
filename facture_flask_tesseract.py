@@ -11,12 +11,6 @@ import json
 import jsonpickle
 import numpy as np
 import cv2
-from pdf2image import convert_from_path, convert_from_bytes
-from pdf2image.exceptions import (
-    PDFInfoNotInstalledError,
-    PDFPageCountError,
-    PDFSyntaxError
-)
 
 
 app = Flask(__name__)
