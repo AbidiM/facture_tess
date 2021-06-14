@@ -42,7 +42,7 @@ def getPosElement(po):
     return element
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def hello_world():
     return render_template('index.html')
 
