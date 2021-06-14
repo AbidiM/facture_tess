@@ -1,4 +1,4 @@
-from flask import Flask, request, Response
+from flask import Flask, request, Response, render_template
 try:
     from PIL import Image
 except ImportError:
@@ -52,13 +52,17 @@ def index():
     return Response(response=response_pickled, status=200, mimetype="application/json")
 
 
+@app.route('/', methods=['GET'])
+def hello_world():
+    return render_template('index.html')
+
+
 @app.route('/', methods=['POST'])
 def invoice():
 
-    query = request.query_string['image_b64']
-    # imagefile = request.files['imagefile']
+    imagefile = request.files['imagefile']
 
-    # query = base64.b64encode(imagefile.read())
+    query = base64.b64encode(imagefile.read())
 
     image_string = io.BytesIO(base64.b64decode(query))
 
@@ -93,9 +97,10 @@ def invoice():
         resultat, 'Total TTC (en euros) ', '\nEn votre aimable reglement,').strip()
 
     # Preprare respsonse, encode JSON to return
-    response_pickled = jsonpickle.encode(output)
-    return Response(response=response_pickled, status=200, mimetype="application/json")
+    classification = response_pickled = jsonpickle.encode(output)
+    # return Response(response=response_pickled, status=200, mimetype="application/json")
+    return render_template('index.html', prediction=classification)
 
 
-# if __name__ == '__main__':
-#     app.run(port=8000, debug=True)
+if __name__ == '__main__':
+    app.run(port=8000, debug=True)
