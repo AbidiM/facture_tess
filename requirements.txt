@@ -61,7 +61,6 @@ pyasn1-modules==0.2.8
 pycairo==1.16.2
 pycodestyle==2.7.0
 pycups==2.0.1
-PyGObject==3.38.0
 pyinotify==0.9.6
 PyJWT==1.7.1
 pymacaroons==0.13.0
