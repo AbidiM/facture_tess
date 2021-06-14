@@ -10,7 +10,6 @@ chardet==4.0.0
 click==7.1.2
 colorama==0.4.4
 cryptography==3.3.2
-dbus-python==1.2.16
 distro==1.5.0
 Django==3.2.4
 duplicity==0.8.17
