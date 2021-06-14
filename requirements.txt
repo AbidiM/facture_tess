@@ -1,6 +1,5 @@
 flask
 Image
 pytesseract
-io
 jsonpickle
 gunicorn
