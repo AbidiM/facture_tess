@@ -7,6 +7,7 @@ import pytesseract
 import base64
 import io
 import jsonpickle
+from werkzeug.serving import WSGIRequestHandler
 
 
 app = Flask(__name__)
@@ -19,8 +20,6 @@ def RemoveEmptyLines(entree):
     for i in range(0, len(tableausansvide)):
         res = res + tableausansvide[i] + '\n'
     return res
-
-# Get the string bettween two tag strings (and remove empty lines in between)
 
 
 def getTextBetween(mainString, startWord, endWord):
@@ -43,16 +42,7 @@ def getPosElement(po):
     return element
 
 
-@app.route('/check')
-def index():
-    output = {}
-    output['status'] = "Service running"
-    # Preprare respsonse, encode JSON to return
-    response_pickled = jsonpickle.encode(output)
-    return Response(response=response_pickled, status=200, mimetype="application/json")
-
-
-@app.route('/', methods=['GET'])
+@app.route('/')
 def hello_world():
     return render_template('index.html')
 
@@ -100,3 +90,8 @@ def invoice():
     classification = response_pickled = jsonpickle.encode(output)
     # return Response(response=response_pickled, status=200, mimetype="application/json")
     return render_template('index.html', prediction=classification)
+
+
+if __name__ == '__main__':
+    WSGIRequestHandler.protocol_version = "HTTP/1.1"
+    app.run(host='0.0.0.0', port=5000)
