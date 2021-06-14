@@ -99,4 +99,3 @@ wadllib==1.3.5
 Werkzeug==2.0.1
 wrapt==1.12.1
 xdg==5
-xkit==0.0.0
