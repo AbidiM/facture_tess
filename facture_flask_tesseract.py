@@ -4,13 +4,9 @@ try:
 except ImportError:
     import Image
 import pytesseract
-import requests
 import base64
 import io
-import json
 import jsonpickle
-import numpy as np
-import cv2
 
 
 app = Flask(__name__)
@@ -56,26 +52,16 @@ def index():
     return Response(response=response_pickled, status=200, mimetype="application/json")
 
 
-@app.route('/facture', methods=['POST'])
+@app.route('/', methods=['POST'])
 def invoice():
 
-    # fichier = r'Facture_2.jpg'
-    # response = requests.get("https://raw.githubusercontent.com/datacorner/les-tutos-datacorner.fr/master/computer-vision/tessFactures/Facture_1.jpg")
-    query=dict(request.form)['query']
-    imgstring = 'data: image/png;base64,'+query
-    imgstring = imgstring.split('base64,')[-1].strip()
-    pic = io.StringIO()
-    image_string = io.BytesIO(base64.b64decode(imgstring))
-    # img = cv2.imread(fichier)
+    query = request.query_string['image_b64']
+    # imagefile = request.files['imagefile']
 
-    # encode image as jpeg
-    # _, img_encoded = cv2.imencode('.jpg', img)
+    # query = base64.b64encode(imagefile.read())
 
-    # # convert string of image data to uint8
-    # nparr = np.frombuffer(img_encoded, np.uint8)
-    # # decode image
-    # image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    # img = Image.open(io.BytesIO(response.content))
+    image_string = io.BytesIO(base64.b64decode(query))
+
     img = Image.open(image_string)
 
     output = {}
@@ -111,5 +97,5 @@ def invoice():
     return Response(response=response_pickled, status=200, mimetype="application/json")
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+# if __name__ == '__main__':
+#     app.run(port=8000, debug=True)
