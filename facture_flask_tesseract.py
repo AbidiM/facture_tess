@@ -100,7 +100,3 @@ def invoice():
     classification = response_pickled = jsonpickle.encode(output)
     # return Response(response=response_pickled, status=200, mimetype="application/json")
     return render_template('index.html', prediction=classification)
-
-
-if __name__ == '__main__':
-    app.run()
