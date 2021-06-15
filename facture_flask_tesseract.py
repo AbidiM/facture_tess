@@ -52,9 +52,9 @@ def index():
     return Response(response=response_pickled, status=200, mimetype="application/json")
 
 
-@app.route('/')
-def home():
-    return "facture data"
+@app.route("/")
+def index():
+    return "<h1>Welcome!!</h1>"
 
 
 @app.route('/facture', methods=['POST'])
@@ -99,4 +99,5 @@ def invoice():
 
 
 if __name__ == '__main__':
-    app.run(port=8000, debug=True)
+    WSGIRequestHandler.protocol_version = "HTTP/1.1"
+    app.run(threaded=True, host='0.0.0.0', port=5000)
