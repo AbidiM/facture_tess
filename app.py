@@ -50,7 +50,7 @@ def invoice():
     img = Image.open(io.BytesIO(response.content))
 
     output = {}
-    pytesseract.pytesseract.tesseract_cmd = r'/app/.apt/usr/bin/tesseract'
+    pytesseract.pytesseract.tesseract_cmd = r'./.apt/usr/share/tesseract-ocr/4.00/tessdata'
     resultat = pytesseract.image_to_string(img)
     print(resultat)
     output["Adresse"] = getTextBetween(
