@@ -4,3 +4,4 @@ Image
 pytesseract
 requests
 jsonpickle
+gunicorn
