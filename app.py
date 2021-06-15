@@ -1,8 +1,9 @@
-from flask import Flask, request, Response
+from flask import Flask, request, Response, render_template
 from PIL import Image
 from werkzeug.serving import WSGIRequestHandler
 import pytesseract
 import requests
+import base64
 import io
 import jsonpickle
 
@@ -41,13 +42,34 @@ def getPosElement(po):
     return element
 
 
+@app.route('/check')
+def index():
+    output = {}
+    output['status'] = "Service running"
+    # Preprare respsonse, encode JSON to return
+    response_pickled = jsonpickle.encode(output)
+    return Response(response=response_pickled, status=200, mimetype="application/json")
+
+
 @app.route('/facture', methods=['POST'])
 def invoice():
 
-    response = requests.get(
-        'https://raw.githubusercontent.com/datacorner/les-tutos-datacorner.fr/master/computer-vision/tessFactures/Facture_2.jpg')
+    #get image from URL
 
-    img = Image.open(io.BytesIO(response.content))
+    # response = requests.get(
+    #     'https://raw.githubusercontent.com/datacorner/les-tutos-datacorner.fr/master/computer-vision/tessFactures/Facture_2.jpg')
+
+    # img = Image.open(io.BytesIO(response.content))
+
+    # get image
+
+    imagefile = request.files['imagefile']
+
+    query = base64.b64encode(imagefile.read())
+
+    image_string = io.BytesIO(base64.b64decode(query))
+
+    img = Image.open(image_string)
 
     output = {}
     pytesseract.pytesseract.tesseract_cmd = r'/app/.apt/usr/bin/tesseract'
@@ -80,7 +102,7 @@ def invoice():
     # Preprare respsonse, encode JSON to return
     response_pickled = jsonpickle.encode(output)
     # return Response(response=response_pickled, status=200, mimetype="application/json")
-    return Response(response=response_pickled, status=200, mimetype="application/json")
+    return render_template('index.html', prediction=response_pickled)
 
 
 @app.route("/")
