@@ -52,6 +52,11 @@ def index():
     return Response(response=response_pickled, status=200, mimetype="application/json")
 
 
+@app.route('/')
+def home():
+    return "facture data"
+
+
 @app.route('/facture', methods=['POST'])
 def invoice():
 
