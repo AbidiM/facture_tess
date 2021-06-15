@@ -1,10 +1,10 @@
-from flask import Flask, request, Response, render_template
+from flask import Flask, request, Response
 try:
     from PIL import Image
 except ImportError:
     import Image
 import pytesseract
-import base64
+import requests
 import io
 import jsonpickle
 
@@ -52,21 +52,17 @@ def index():
     return Response(response=response_pickled, status=200, mimetype="application/json")
 
 
-@app.route('/', methods=['GET'])
-def hello_world():
-    return render_template('index.html')
+@app.route('/')
+def home():
+    return "facture data"
 
 
-@app.route('/', methods=['POST'])
+@app.route('/facture', methods=['POST'])
 def invoice():
 
-    imagefile = request.files['imagefile']
+    response=requests.get('https://raw.githubusercontent.com/datacorner/les-tutos-datacorner.fr/master/computer-vision/tessFactures/Facture_2.jpg')
 
-    query = base64.b64encode(imagefile.read())
-
-    image_string = io.BytesIO(base64.b64decode(query))
-
-    img = Image.open(image_string)
+    img = Image.open(io.BytesIO(response.content))
 
     output = {}
     pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
@@ -97,9 +93,9 @@ def invoice():
         resultat, 'Total TTC (en euros) ', '\nEn votre aimable reglement,').strip()
 
     # Preprare respsonse, encode JSON to return
-    classification = response_pickled = jsonpickle.encode(output)
+    response_pickled = jsonpickle.encode(output)
     # return Response(response=response_pickled, status=200, mimetype="application/json")
-    return render_template('index.html', prediction=classification)
+    return Response(response=response_pickled, status=200, mimetype="application/json")
 
 
 if __name__ == '__main__':
