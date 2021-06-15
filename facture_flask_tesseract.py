@@ -1,10 +1,7 @@
 from flask import Flask, request, Response
-try:
-    from PIL import Image
-except ImportError:
-    import Image
-import pytesseract
+from PIL import Image
 from werkzeug.serving import WSGIRequestHandler
+import pytesseract
 import requests
 import io
 import jsonpickle
@@ -42,11 +39,6 @@ def getPosElement(po):
     po = po[0:po.rfind(' ')]
     element['decription'] = po.strip()
     return element
-
-
-@app.route("/")
-def index():
-    return "<h1>Welcome!!</h1>"
 
 
 @app.route('/facture', methods=['POST'])
@@ -89,6 +81,11 @@ def invoice():
     response_pickled = jsonpickle.encode(output)
     # return Response(response=response_pickled, status=200, mimetype="application/json")
     return Response(response=response_pickled, status=200, mimetype="application/json")
+
+
+@app.route("/")
+def index():
+    return "<h1>Welcome!!</h1>"
 
 
 if __name__ == '__main__':
