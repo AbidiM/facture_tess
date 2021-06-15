@@ -1,0 +1,8 @@
+Flask
+Response
+Image
+pytesseract
+requests
+io
+jsonpickle
+gunicorn
