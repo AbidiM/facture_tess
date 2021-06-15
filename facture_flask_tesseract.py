@@ -4,13 +4,9 @@ try:
 except ImportError:
     import Image
 import pytesseract
-import requests
 import base64
 import io
-import json
 import jsonpickle
-import numpy as np
-import cv2
 
 
 app = Flask(__name__)
