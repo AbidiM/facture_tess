@@ -4,6 +4,7 @@ try:
 except ImportError:
     import Image
 import pytesseract
+from werkzeug.serving import WSGIRequestHandler
 import requests
 import io
 import jsonpickle
@@ -43,15 +44,6 @@ def getPosElement(po):
     return element
 
 
-@app.route('/check')
-def index():
-    output = {}
-    output['status'] = "Service running"
-    # Preprare respsonse, encode JSON to return
-    response_pickled = jsonpickle.encode(output)
-    return Response(response=response_pickled, status=200, mimetype="application/json")
-
-
 @app.route("/")
 def index():
     return "<h1>Welcome!!</h1>"
@@ -60,7 +52,8 @@ def index():
 @app.route('/facture', methods=['POST'])
 def invoice():
 
-    response=requests.get('https://raw.githubusercontent.com/datacorner/les-tutos-datacorner.fr/master/computer-vision/tessFactures/Facture_2.jpg')
+    response = requests.get(
+        'https://raw.githubusercontent.com/datacorner/les-tutos-datacorner.fr/master/computer-vision/tessFactures/Facture_2.jpg')
 
     img = Image.open(io.BytesIO(response.content))
 

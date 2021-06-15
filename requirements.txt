@@ -2,6 +2,7 @@ Flask
 Response
 Image
 pytesseract
+werkzeug
 requests
 jsonpickle
 gunicorn
