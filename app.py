@@ -43,7 +43,7 @@ def getPosElement(po):
 
 
 @app.route('/check')
-def index():
+def check():
     output = {}
     output['status'] = "Service running"
     # Preprare respsonse, encode JSON to return
@@ -54,22 +54,14 @@ def index():
 @app.route('/facture', methods=['POST'])
 def invoice():
 
-    #get image from URL
+    # get image from URL
 
-    # response = requests.get(
-    #     'https://raw.githubusercontent.com/datacorner/les-tutos-datacorner.fr/master/computer-vision/tessFactures/Facture_2.jpg')
+    response = requests.get(
+        'https://raw.githubusercontent.com/datacorner/les-tutos-datacorner.fr/master/computer-vision/tessFactures/Facture_2.jpg')
 
-    # img = Image.open(io.BytesIO(response.content))
+    
 
-    # get image
-
-    imagefile = request.files['imagefile']
-
-    query = base64.b64encode(imagefile.read())
-
-    image_string = io.BytesIO(base64.b64decode(query))
-
-    img = Image.open(image_string)
+    img = Image.open(io.BytesIO(response.content))
 
     output = {}
     pytesseract.pytesseract.tesseract_cmd = r'/app/.apt/usr/bin/tesseract'
@@ -101,13 +93,12 @@ def invoice():
 
     # Preprare respsonse, encode JSON to return
     response_pickled = jsonpickle.encode(output)
-    # return Response(response=response_pickled, status=200, mimetype="application/json")
-    return render_template('index.html', prediction=response_pickled)
+    return Response(response=response_pickled, status=200, mimetype="application/json")
 
 
-@app.route("/")
+@app.route('/')
 def index():
-    return "<h1>Welcome!!</h1>"
+    return "<h1>Welcome it works</h1>"
 
 
 if __name__ == '__main__':
