@@ -19,6 +19,7 @@ def RemoveEmptyLines(entree):
         res = res + tableausansvide[i] + '\n'
     return res
 
+
 # Get the string bettween two tag strings (and remove empty lines in between)
 
 
@@ -26,6 +27,7 @@ def getTextBetween(mainString, startWord, endWord):
     start = mainString.find(startWord) + len(startWord)
     end = mainString.find(endWord)
     return RemoveEmptyLines(mainString[start:end])
+
 
 # get the PO details in the specific invoice
 
@@ -54,21 +56,29 @@ def check():
 @app.route('/facture', methods=['POST'])
 def invoice():
 
-    # get image from URL
+    # # get image from file
+    # fichier = r'./images/Facture_2.jpg'
+    # image = Image.open(fichier)
+    query = request.files['query']
+    img = Image.open(query)
 
+
+    # # get image from URL
     # response = requests.get(
     #     'https://raw.githubusercontent.com/datacorner/les-tutos-datacorner.fr/master/computer-vision/tessFactures/Facture_2.jpg')
-    # img = Image.open(io.BytesIO(response.content))
+    # imagefile = Image.open(io.BytesIO(response.content))
 
+    # convert image to base64
+    # query = base64.b64encode(image.read())
 
-    # get ilage from base64
-    query= dict(request.form)['query']
-    image_string = io.BytesIO(base64.b64decode(query))
+    # get image from base64
+    # query = request.form['query']
+    # image_string = io.BytesIO(base64.b64decode(query))
 
-    img = Image.open(image_string)
+    # img = Image.open(image_string)
 
     output = {}
-    pytesseract.pytesseract.tesseract_cmd = r'./.apt/usr/bin/tesseract'
+    pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
     resultat = pytesseract.image_to_string(img)
     print(resultat)
     output["Adresse"] = getTextBetween(
