@@ -56,12 +56,16 @@ def invoice():
 
     # get image from URL
 
-    response = requests.get(
-        'https://raw.githubusercontent.com/datacorner/les-tutos-datacorner.fr/master/computer-vision/tessFactures/Facture_2.jpg')
+    # response = requests.get(
+    #     'https://raw.githubusercontent.com/datacorner/les-tutos-datacorner.fr/master/computer-vision/tessFactures/Facture_2.jpg')
+    # img = Image.open(io.BytesIO(response.content))
 
-    
 
-    img = Image.open(io.BytesIO(response.content))
+    # get ilage from base64
+    query= dict(request.form)['query']
+    image_string = io.BytesIO(base64.b64decode(query))
+
+    img = Image.open(image_string)
 
     output = {}
     pytesseract.pytesseract.tesseract_cmd = r'./.apt/usr/bin/tesseract'
