@@ -60,9 +60,9 @@ def hello_world():
 def invoice():
 
     # image = Image.open(fichier)
-    imagefile = request.files['imagefile']
+    # imagefile = request.files['imagefile']
 
-    img = Image.open(imagefile)
+    # img = Image.open(imagefile)
 
     # # get image from URL
     # response = requests.get(
@@ -73,10 +73,10 @@ def invoice():
     # query = base64.b64encode(image.read())
 
     # get image from base64
-    # query = request.form['query']
-    # image_string = io.BytesIO(base64.b64decode(query))
+    query = request.form['query']
+    image_string = io.BytesIO(base64.b64decode(query))
 
-    # img = Image.open(image_string)
+    img = Image.open(image_string)
 
     output = {}
     pytesseract.pytesseract.tesseract_cmd = r'./.apt/usr/bin/tesseract'
