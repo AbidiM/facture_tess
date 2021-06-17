@@ -19,7 +19,6 @@ def RemoveEmptyLines(entree):
         res = res + tableausansvide[i] + '\n'
     return res
 
-
 # Get the string bettween two tag strings (and remove empty lines in between)
 
 
@@ -27,7 +26,6 @@ def getTextBetween(mainString, startWord, endWord):
     start = mainString.find(startWord) + len(startWord)
     end = mainString.find(endWord)
     return RemoveEmptyLines(mainString[start:end])
-
 
 # get the PO details in the specific invoice
 
@@ -45,7 +43,7 @@ def getPosElement(po):
 
 
 @app.route('/check')
-def check():
+def index():
     output = {}
     output['status'] = "Service running"
     # Preprare respsonse, encode JSON to return
@@ -53,15 +51,18 @@ def check():
     return Response(response=response_pickled, status=200, mimetype="application/json")
 
 
+@app.route('/', methods=['GET'])
+def hello_world():
+    return "<h1>it works</h1>"
+
+
 @app.route('/facture', methods=['POST'])
 def invoice():
 
-    # # get image from file
-    # fichier = r'./images/Facture_2.jpg'
     # image = Image.open(fichier)
-    query = request.files['query']
-    img = Image.open(query)
+    imagefile = request.files['imagefile']
 
+    img = Image.open(imagefile)
 
     # # get image from URL
     # response = requests.get(
@@ -110,11 +111,6 @@ def invoice():
     return Response(response=response_pickled, status=200, mimetype="application/json")
 
 
-@app.route('/')
-def index():
-    return "<h1>Welcome it works</h1>"
-
-
 if __name__ == '__main__':
     WSGIRequestHandler.protocol_version = "HTTP/1.1"
-    app.run(threaded=True, host='0.0.0.0', port=5000)
+    app.run(threaded=True, host='0.0.0.0', port=8000)
