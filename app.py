@@ -2,7 +2,6 @@ from flask import Flask, request, Response, render_template
 from PIL import Image
 from werkzeug.serving import WSGIRequestHandler
 import pytesseract
-import requests
 import base64
 import io
 import jsonpickle
@@ -59,19 +58,6 @@ def hello_world():
 @app.route('/facture', methods=['POST'])
 def invoice():
 
-    # image = Image.open(fichier)
-    # imagefile = request.files['imagefile']
-
-    # img = Image.open(imagefile)
-
-    # # get image from URL
-    # response = requests.get(
-    #     'https://raw.githubusercontent.com/datacorner/les-tutos-datacorner.fr/master/computer-vision/tessFactures/Facture_2.jpg')
-    # imagefile = Image.open(io.BytesIO(response.content))
-
-    # convert image to base64
-    # query = base64.b64encode(image.read())
-
     # get image from base64
     query = request.form['query']
     image_string = io.BytesIO(base64.b64decode(query))
@@ -83,16 +69,16 @@ def invoice():
     resultat = pytesseract.image_to_string(img)
     print(resultat)
     output["Adresse"] = getTextBetween(
-        resultat, 'www.blueprism.com/fr', 'Référence').strip()
+        resultat, 'CO.PRO.PHA', 'Bon de livraison').strip()
     output["Reference"] = getTextBetween(
-        resultat, 'Référence: ', 'Date: ').strip()
+        resultat, 'Tireur', '04/12/2020').strip()
     output["DateFacture"] = getTextBetween(
-        resultat, 'Date: ', 'Client: ').strip()
+        resultat, 'FJ1863844', 'SOUHIR').strip()
     output["CodeClient"] = getTextBetween(
-        resultat, 'Client: ', 'Intitulé: ').strip()
+        resultat, 'Client', 'BAROUNI TARIK').strip()
 
     # Récupération des lignes de PO
-    pos = getTextBetween(resultat, 'Prix total HT', 'Total HT ')
+    pos = getTextBetween(resultat, 'TVA', '1344')
     tabPOs = pos.splitlines()
     output["NbPo"] = len(tabPOs)
     pos = []
@@ -100,11 +86,11 @@ def invoice():
         pos.append(getPosElement(tabPOs[i]))
     output['po'] = pos
     output["totalht"] = getTextBetween(
-        resultat, 'Total HT ', 'TVA (20%) ').strip()
+        resultat, 'Total HT ', 'Total TVA').strip()
     output["tva"] = getTextBetween(
-        resultat, 'TVA (20%) ', 'Total TTC (en euros) ').strip()
+        resultat, 'TVA', 'Timbre').strip()
     output["total"] = getTextBetween(
-        resultat, 'Total TTC (en euros) ', '\nEn votre aimable reglement,').strip()
+        resultat, 'Total TTC', 'cachet').strip()
 
     # Preprare respsonse, encode JSON to return
     response_pickled = jsonpickle.encode(output)
