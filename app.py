@@ -1,14 +1,14 @@
-from flask import Flask, request, Response, render_template
+from quart import Quart, request, Response
+import asyncpg
 from PIL import Image
 from werkzeug.serving import WSGIRequestHandler
 import pytesseract
-import requests
 import base64
 import io
 import jsonpickle
 
 
-app = Flask(__name__)
+app = Quart(__name__)
 
 
 def RemoveEmptyLines(entree):
@@ -57,23 +57,10 @@ def hello_world():
 
 
 @app.route('/facture', methods=['POST'])
-def invoice():
-
-    # image = Image.open(fichier)
-    # imagefile = request.files['imagefile']
-
-    # img = Image.open(imagefile)
-
-    # # get image from URL
-    # response = requests.get(
-    #     'https://raw.githubusercontent.com/datacorner/les-tutos-datacorner.fr/master/computer-vision/tessFactures/Facture_2.jpg')
-    # imagefile = Image.open(io.BytesIO(response.content))
-
-    # convert image to base64
-    # query = base64.b64encode(image.read())
+async def invoice():
 
     # get image from base64
-    query = request.form['query']
+    query = await request.form['query']
     image_string = io.BytesIO(base64.b64decode(query))
 
     img = Image.open(image_string)
