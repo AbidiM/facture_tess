@@ -61,14 +61,14 @@ def hello_world():
 async def invoice():
 
     # get image from base64
-    query = request.form['query']
-    image_string = io.BytesIO(base64.b64decode(query))
+    query = await request.form['query']
+    image_string = await io.BytesIO(base64.b64decode(query))
 
-    img = Image.open(image_string)
+    img = await Image.open(image_string)
 
     output = {}
     pytesseract.pytesseract.tesseract_cmd = r'./.apt/usr/bin/tesseract'
-    resultat = pytesseract.image_to_string(img)
+    resultat = await pytesseract.image_to_string(img)
     print(resultat)
     output["Adresse"] = getTextBetween(
         resultat, 'www.blueprism.com/fr', 'Référence').strip()
@@ -95,7 +95,7 @@ async def invoice():
         resultat, 'Total TTC (en euros) ', '\nEn votre aimable reglement,').strip()
 
     # Preprare respsonse, encode JSON to return
-    response_pickled = jsonpickle.encode(output)
+    response_pickled = await jsonpickle.encode(output)
     print(response_pickled)
     return await Response(response=response_pickled, status=200, mimetype="application/json")
 
