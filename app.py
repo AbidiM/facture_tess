@@ -58,10 +58,10 @@ def hello_world():
 
 
 @app.route('/facture', methods=['POST'])
-def invoice():
+async def invoice():
 
     # get image from base64
-    query = request.form['query']
+    query = (await request.form)['query']
     image_string = io.BytesIO(base64.b64decode(query))
 
     img = Image.open(image_string)
