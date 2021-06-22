@@ -6,6 +6,7 @@ import base64
 import io
 import jsonpickle
 import uvicorn
+import asyncio
 
 
 app = Quart(__name__)
@@ -95,7 +96,8 @@ async def invoice():
 
     # Preprare respsonse, encode JSON to return
     response_pickled = jsonpickle.encode(output)
-    return Response(response=response_pickled, status=200, mimetype="application/json")
+    print(response_pickled)
+    return await Response(response=response_pickled, status=200, mimetype="application/json")
 
 
 if __name__ == '__main__':
