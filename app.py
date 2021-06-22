@@ -1,15 +1,15 @@
 from quart import Quart, request, Response
-import asyncpg
 from PIL import Image
 from werkzeug.serving import WSGIRequestHandler
 import pytesseract
 import base64
 import io
 import jsonpickle
+import time
 
 
 app = Quart(__name__)
-
+time.sleep(5)
 
 def RemoveEmptyLines(entree):
     tab = entree.strip()
@@ -57,6 +57,7 @@ def hello_world():
 
 
 @app.route('/facture', methods=['POST'])
+
 async def invoice():
 
     # get image from base64
