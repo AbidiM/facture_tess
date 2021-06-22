@@ -11,6 +11,7 @@ import asyncio
 
 app = Quart(__name__)
 
+
 def RemoveEmptyLines(entree):
     tab = entree.strip()
     tableausansvide = [x for x in tab.splitlines() if x != '']
@@ -57,18 +58,17 @@ def hello_world():
 
 
 @app.route('/facture', methods=['POST'])
-
-async def invoice():
+def invoice():
 
     # get image from base64
-    query = await request.form['query']
-    image_string = await io.BytesIO(base64.b64decode(query))
+    query = request.form['query']
+    image_string = io.BytesIO(base64.b64decode(query))
 
-    img = await Image.open(image_string)
+    img = Image.open(image_string)
 
     output = {}
     pytesseract.pytesseract.tesseract_cmd = r'./.apt/usr/bin/tesseract'
-    resultat = await pytesseract.image_to_string(img)
+    resultat = pytesseract.image_to_string(img)
     print(resultat)
     output["Adresse"] = getTextBetween(
         resultat, 'www.blueprism.com/fr', 'Référence').strip()
@@ -95,9 +95,9 @@ async def invoice():
         resultat, 'Total TTC (en euros) ', '\nEn votre aimable reglement,').strip()
 
     # Preprare respsonse, encode JSON to return
-    response_pickled = await jsonpickle.encode(output)
+    response_pickled = jsonpickle.encode(output)
     print(response_pickled)
-    return await Response(response=response_pickled, status=200, mimetype="application/json")
+    return Response(response=response_pickled, status=200, mimetype="application/json")
 
 
 if __name__ == '__main__':
