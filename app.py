@@ -61,7 +61,7 @@ def hello_world():
 async def invoice():
 
     # get image from base64
-    query = await request.form['query']
+    query = request.form['query']
     image_string = io.BytesIO(base64.b64decode(query))
 
     img = Image.open(image_string)
