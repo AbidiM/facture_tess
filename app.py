@@ -5,11 +5,9 @@ import pytesseract
 import base64
 import io
 import jsonpickle
-import time
 
 
 app = Quart(__name__)
-time.sleep(5)
 
 def RemoveEmptyLines(entree):
     tab = entree.strip()
@@ -99,6 +97,6 @@ async def invoice():
     return Response(response=response_pickled, status=200, mimetype="application/json")
 
 
-# if __name__ == '__main__':
-#     WSGIRequestHandler.protocol_version = "HTTP/1.1"
-#     app.run(threaded=True, host='0.0.0.0', port=8000)
+if __name__ == '__main__':
+    WSGIRequestHandler.protocol_version = "HTTP/1.1"
+    app.run(threaded=True, host='0.0.0.0', port=8000)
