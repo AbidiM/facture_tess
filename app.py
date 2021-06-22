@@ -5,6 +5,7 @@ import pytesseract
 import base64
 import io
 import jsonpickle
+import uvicorn
 
 
 app = Quart(__name__)
@@ -99,4 +100,5 @@ async def invoice():
 
 if __name__ == '__main__':
     WSGIRequestHandler.protocol_version = "HTTP/1.1"
-    app.run(threaded=True, host='0.0.0.0', port=8000)
+    # app.run(threaded=True, host='0.0.0.0', port=8000)
+    uvicorn.run("app:app", host="127.0.0.1", port=5000, log_level="info")
