@@ -94,6 +94,7 @@ async def invoice():
     output["total"] = getTextBetween(
         resultat, 'Total TTC (en euros) ', '\nEn votre aimable reglement,').strip()
 
+
     # Preprare respsonse, encode JSON to return
     response_pickled = jsonpickle.encode(output)
     print(response_pickled)
